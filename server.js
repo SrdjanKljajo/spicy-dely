@@ -19,6 +19,10 @@ connectDB()
 
 const app = express()
 
+// Import files
+import product from './routes/product.js'
+import category from './routes/category.js'
+
 // MIDDLEWARES
 import notFound from './middlewares/not-found-route.js'
 import mongooseErrors from './middlewares/error-mongoose.js'
@@ -58,6 +62,10 @@ if (process.env.NODE_ENV === 'development') {
 // Static folder
 const __dirname = path.resolve()
 app.use(express.static(`${__dirname}/public/`))
+
+// import routes
+app.use('/api/v1/product', product)
+app.use('/api/v1/category', category)
 
 // Not found route
 app.use(notFound)
