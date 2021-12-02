@@ -15,6 +15,13 @@ const categorySchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: [true, 'Please provide product'],
+      },
+    ],
   },
   { timestamps: true }
 )

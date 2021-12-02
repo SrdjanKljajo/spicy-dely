@@ -15,6 +15,16 @@ const getProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ product })
 }
 
+const getProductCategories = async (req, res) => {
+  const productID = req.params.productId
+  if (productID) {
+    const categories = await Category.find({ products: productID })
+    res.status(StatusCodes.OK).json({ categories, count: categories.length })
+  } else {
+    throw new CustomError.NotFoundError(`Product with ${productID} not found`)
+  }
+}
+
 const createProduct = async (req, res) => {
   const product = await Product.create(req.body)
   res.status(StatusCodes.CREATED).json({ product })
@@ -52,4 +62,5 @@ export {
   getAllProducts,
   updateProduct,
   getProduct,
+  getProductCategories,
 }
