@@ -71,7 +71,18 @@ const updateProductSingleAtribute = async (req, res) => {
   if (!product) {
     throw new CustomError.NotFoundError(`Product ${req.params.slug} not found`)
   }
-  res.status(StatusCodes.OK).json({ name, sku, price, categories })
+  if (name) {
+    return res.status(StatusCodes.OK).json({ name })
+  }
+  if (sku) {
+    return res.status(StatusCodes.OK).json({ sku })
+  }
+  if (price) {
+    return res.status(StatusCodes.OK).json({ price })
+  }
+  if (categories) {
+    return res.status(StatusCodes.OK).json({ categories })
+  }
 }
 
 // @desc      Delete product
