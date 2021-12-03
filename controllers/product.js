@@ -2,34 +2,33 @@ import Product from '../models/Product.js'
 import { StatusCodes } from 'http-status-codes'
 import CustomError from '../errors/index.js'
 
+// @desc      Get products
+// @route     GET /api/v1/product
 const getAllProducts = async (req, res) => {
   const products = await Product.find().sort('createdAt')
   res.status(StatusCodes.OK).json({ products, count: products.length })
 }
+
+// @desc      Get single product
+// @route     GET /api/v1/product/:slug
 const getProduct = async (req, res) => {
-  const id = req.params.id
-  const product = await Product.findById(id)
+  const slug = req.params.slug
+  const product = await Product.findOne({ slug })
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id ${id}`)
+    throw new CustomError.NotFoundError(`Product ${slug} not found`)
   }
   res.status(StatusCodes.OK).json({ product })
 }
 
-const getProductCategories = async (req, res) => {
-  const productID = req.params.productId
-  if (productID) {
-    const categories = await Category.find({ products: productID })
-    res.status(StatusCodes.OK).json({ categories, count: categories.length })
-  } else {
-    throw new CustomError.NotFoundError(`Product with ${productID} not found`)
-  }
-}
-
+// @desc      Create product
+// @route     POST /api/v1/product
 const createProduct = async (req, res) => {
   const product = await Product.create(req.body)
   res.status(StatusCodes.CREATED).json({ product })
 }
 
+// @desc      Update all product atrributes at once
+// @route     PUT /api/v1/product/:slug
 const updateProduct = async (req, res) => {
   const { name, sku, price, categories } = req.body
 
@@ -37,23 +36,55 @@ const updateProduct = async (req, res) => {
     throw new CustomError.BadRequestError('Fields cannot be empty')
   }
 
-  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  })
+  const product = await Product.findOneAndUpdate(
+    { slug: req.params.slug },
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id ${req.params.id}`)
+    throw new CustomError.NotFoundError(`Product ${req.params.slug} not found`)
   }
+
   res.status(StatusCodes.OK).json({ product })
 }
 
-const deleteProduct = async (req, res) => {
-  const productId = req.params.id
-  const product = await Product.findByIdAndDelete(productId)
-  if (!product) {
-    throw new CustomError.NotFoundError(`No job with id ${productId}`)
+// @desc      Update single product atrribute
+// @route     PATCH /api/v1/product/:slug
+const updateProductSingleAtribute = async (req, res) => {
+  const { name, sku, price, categories } = req.body
+
+  if (name === '' || sku === '' || price === '' || categories === '') {
+    throw new CustomError.BadRequestError('Fields cannot be empty')
   }
-  res.status(StatusCodes.OK).send()
+
+  const product = await Product.findOneAndUpdate(
+    { slug: req.params.slug },
+    { name, sku, price, categories },
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+  if (!product) {
+    throw new CustomError.NotFoundError(`Product ${req.params.slug} not found`)
+  }
+  res.status(StatusCodes.OK).json({ name, sku, price, categories })
+}
+
+// @desc      Delete product
+// @route     DELETE /api/v1/product/:slug
+const deleteProduct = async (req, res) => {
+  const productSlug = req.params.slug
+  const product = await Product.findOneAndDelete({
+    slug: req.params.slug,
+  })
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product ${productSlug}`)
+  }
+  res.status(StatusCodes.NO_CONTENT).send()
 }
 
 export {
@@ -61,6 +92,6 @@ export {
   deleteProduct,
   getAllProducts,
   updateProduct,
+  updateProductSingleAtribute,
   getProduct,
-  getProductCategories,
 }

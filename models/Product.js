@@ -7,9 +7,13 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'product name must be provided'],
     },
-    sku: {
+    slug: {
       type: String,
       unique: true,
+      index: true,
+    },
+    sku: {
+      type: String,
       required: [true, 'sku must be provided'],
     },
     price: {
