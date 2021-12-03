@@ -52,7 +52,7 @@ const deleteProduct = async (req, res) => {
   const productId = req.params.id
   const product = await Product.findByIdAndDelete(productId)
   if (!product) {
-    throw new CustomError.NotFoundError(`No job with id ${productId}`)
+    throw new CustomError.NotFoundError(`No product with id ${productId}`)
   }
   res.status(StatusCodes.OK).send()
 }
