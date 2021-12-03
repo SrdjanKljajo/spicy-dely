@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required: [true, 'Please provide category'],
+        required: [true, 'Please provide category field'],
       },
     ],
   },

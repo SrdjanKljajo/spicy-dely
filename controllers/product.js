@@ -32,7 +32,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { name, sku, price, categories } = req.body
 
-  if (name === '' || sku === '' || price === '' || categories === '') {
+  if (name === '' || sku === '' || price === '' || categories.length === 0) {
     throw new CustomError.BadRequestError('Fields cannot be empty')
   }
 
@@ -56,7 +56,7 @@ const updateProduct = async (req, res) => {
 const updateProductSingleAtribute = async (req, res) => {
   const { name, sku, price, categories } = req.body
 
-  if (name === '' || sku === '' || price === '' || categories === '') {
+  if (name === '' || sku === '' || price === '' || categories.length === 0) {
     throw new CustomError.BadRequestError('Fields cannot be empty')
   }
 
