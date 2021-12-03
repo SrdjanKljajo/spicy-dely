@@ -1,4 +1,5 @@
 import Product from '../models/Product.js'
+import Category from '../models/Category.js'
 import { StatusCodes } from 'http-status-codes'
 import CustomError from '../errors/index.js'
 
