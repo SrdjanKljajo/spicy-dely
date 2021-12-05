@@ -56,10 +56,6 @@ const updateProduct = async (req, res) => {
 const updateProductSingleAtribute = async (req, res) => {
   const { name, sku, price, categories } = req.body
 
-  if (name === '' || sku === '' || price === '' || categories.length === 0) {
-    throw new CustomError.BadRequestError('Fields cannot be empty')
-  }
-
   const product = await Product.findOneAndUpdate(
     { slug: req.params.slug },
     { name, sku, price, categories },
