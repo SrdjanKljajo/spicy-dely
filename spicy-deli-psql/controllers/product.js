@@ -4,7 +4,10 @@ const { Product } = require('../models')
 // @desc      Get products
 // @route     GET /api/v1/product
 const getAllProducts = async (req, res) => {
-  const products = await Product.findAll()
+  const products = await Product.findAll({
+    limit: 10,
+    order: [['name', 'DESC']],
+  })
   res.status(StatusCodes.OK).json({ products, count: products.length })
 }
 
@@ -24,13 +27,6 @@ const getProduct = async (req, res) => {
 // @desc      Create product
 // @route     POST /api/v1/product
 const createProduct = async (req, res) => {
-  /*const { name } = req.body
-  const productExist = Product.findOne({ where: { name } })
-  if (productExist) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(`Product with name ${name} exist in database`)
-  }*/
   const product = await Product.create(req.body)
   res.status(StatusCodes.CREATED).json({ product })
 }

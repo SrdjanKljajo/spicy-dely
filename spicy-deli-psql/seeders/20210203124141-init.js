@@ -80,7 +80,7 @@ module.exports = {
         {
           id: 1,
           name: 'Sik Sik Wat',
-          category_id: 5,
+          category_id: 10,
           sku: 'DISH999ABCD',
           price: 13.49,
           created_at: new Date(),
@@ -89,7 +89,7 @@ module.exports = {
         {
           id: 2,
           name: 'Huo Guo',
-          category_id: 1,
+          category_id: 5,
           sku: 'DISH234ZFDR',
           price: 11.99,
           created_at: new Date(),
@@ -98,7 +98,7 @@ module.exports = {
         {
           id: 3,
           name: 'Cau-Cau',
-          category_id: 6,
+          category_id: 4,
           sku: 'DISH775TGHY',
           price: 15.29,
           created_at: new Date(),
@@ -116,8 +116,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('channel', null, bulkDeleteOptions)
-    await queryInterface.bulkDelete('user', null, bulkDeleteOptions)
     await queryInterface.bulkDelete('category', null, bulkDeleteOptions)
     await queryInterface.bulkDelete('product', null, bulkDeleteOptions)
   },
