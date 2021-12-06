@@ -12,11 +12,16 @@ const cors = require('cors')
 // Uvoz dotenv varijabli
 dotenv.config({ path: './config/.env' })
 
-//Import files
+//Import route files
 const product = require('./routes/product')
 //const category = require('./routes/category')
 
 const app = express()
+
+// MIDDLEWARES
+
+//not found route
+const notFound = require('./middlewares/not-found')
 
 // Body parser
 app.use(express.json())
@@ -53,6 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // import routes
 app.use('/api/v1/product', product)
+app.use(notFound)
 //app.use('/api/v1/category', category)
 
 const PORT = process.env.PORT || 5000
