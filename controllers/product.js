@@ -29,6 +29,9 @@ const getProductCategories = async (req, res) => {
   if (!product) {
     throw new CustomError.NotFoundError(`Product ${slug} not found`)
   }
+  if (productCategories.length < 1) {
+    throw new CustomError.NotFoundError(`No category for this product`)
+  }
   res.status(StatusCodes.OK).json({ productCategories })
 }
 

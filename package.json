@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server",
-    "start": "node server"
+    "start": "node server",
+    "import": "node seeder -i",
+    "destroy": "node seeder -d"
   },
   "author": "Srdjan Kljajevic",
   "license": "ISC",
