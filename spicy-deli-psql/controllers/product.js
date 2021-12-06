@@ -1,6 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
 const { Product } = require('../models')
-//const { Category } = require('../models')
 
 // @desc      Get products
 // @route     GET /api/v1/product
@@ -15,7 +14,9 @@ const getProduct = async (req, res) => {
   const id = req.params.id
   const product = await Product.findOne({ where: { id } })
   if (!product) {
-    res.status(StatusCodes.NOT_FOUND).send(`Product with id ${id} not found`)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`Product with id ${id} not found`)
   }
   res.status(StatusCodes.OK).json({ product })
 }
@@ -26,7 +27,7 @@ const createProduct = async (req, res) => {
   const { name } = req.body
   const productExist = Product.findOne({ where: { name } })
   if (productExist) {
-    res
+    return res
       .status(StatusCodes.BAD_REQUEST)
       .send(`Product with name ${name} exist in database`)
   }
@@ -41,13 +42,15 @@ const updateProduct = async (req, res) => {
   const id = req.params.id
   const product = await Product.findOne({ where: { id } })
   if (!product) {
-    res.status(StatusCodes.NOT_FOUND).send(`Product with id ${id} not found`)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`Product with id ${id} not found`)
   }
 
   const { name, sku, price, category_id } = req.body
 
   if (name === '' || sku === '' || price === '' || category_id === '') {
-    res.status(StatusCodes.BAD_REQUEST).send('Fields cannot be empty')
+    return res.status(StatusCodes.BAD_REQUEST).send('Fields cannot be empty')
   }
 
   product.set({ name, sku, price, category_id })
@@ -62,14 +65,12 @@ const updateProductSingleAtribute = async (req, res) => {
   const id = req.params.id
   const product = await Product.findOne({ where: { id } })
   if (!product) {
-    res.status(StatusCodes.NOT_FOUND).send(`Product with id ${id} not found`)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`Product with id ${id} not found`)
   }
 
   const { name, sku, price, category_id } = req.body
-
-  if (name === '' || sku === '' || price === '' || category_id === '') {
-    res.status(StatusCodes.BAD_REQUEST).send('Fields cannot be empty')
-  }
 
   if (name) {
     product.name = name
@@ -95,7 +96,9 @@ const deleteProduct = async (req, res) => {
   const id = req.params.id
   const product = await Product.findOne({ where: { id } })
   if (!product) {
-    res.status(StatusCodes.NOT_FOUND).send(`Product with id ${id} not found`)
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`Product with id ${id} not found`)
   }
   await product.destroy()
   res.status(StatusCodes.NO_CONTENT).send()
@@ -103,17 +106,17 @@ const deleteProduct = async (req, res) => {
 
 // @desc      Get categories by product
 // @route     GET /api/v1/:productId/categories
-/*const getProductCategories = async (req, res) => {
-  const productID = req.params.productId
-  if (productID) {
-    const categories = await Category.findAll({ where: { product_id } })
-    res.status(StatusCodes.OK).json({ categories, count: categories.length })
-  } else {
-    res
+const getProductCategories = async (req, res) => {
+  const id = req.params.productId
+  const product = await Product.findOne({ where: { id } })
+  const productCategories = product.category_id
+  if (!product) {
+    return res
       .status(StatusCodes.NOT_FOUND)
-      .send(`Product with ${productID} not found`)
+      .send(`Product with id ${id} not found`)
   }
-}*/
+  res.status(StatusCodes.OK).json({ productCategories })
+}
 
 module.exports = {
   createProduct,
@@ -122,5 +125,5 @@ module.exports = {
   updateProduct,
   updateProductSingleAtribute,
   getProduct,
-  //getProductCategories,
+  getProductCategories,
 }

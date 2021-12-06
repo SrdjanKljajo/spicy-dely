@@ -1,5 +1,4 @@
 'use strict'
-const { INTEGER } = require('sequelize')
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
@@ -31,10 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      category_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      category_id: [
+        {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+      ],
       createdAt: {
         type: DataTypes.DATE,
         field: 'created_at',

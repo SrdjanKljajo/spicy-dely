@@ -8,7 +8,7 @@ const {
   updateProduct,
   updateProductSingleAtribute,
   deleteProduct,
-  //getProductCategories,
+  getProductCategories,
 } = require('../controllers/product')
 
 router.route('/').get(getAllProducts).post(createProduct)
@@ -18,6 +18,6 @@ router
   .put(updateProduct)
   .patch(updateProductSingleAtribute)
   .delete(deleteProduct)
-//router.route('/:productId/categories').get(getProductCategories)
+router.route('/:productId/categories').get(getProductCategories)
 
 module.exports = router
