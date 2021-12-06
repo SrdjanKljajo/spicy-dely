@@ -20,6 +20,18 @@ const getProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ product })
 }
 
+// @desc      Get single product
+// @route     GET /api/v1/product/:slug/categories
+const getProductCategories = async (req, res) => {
+  const slug = req.params.slug
+  const product = await Product.findOne({ slug })
+  const productCategories = product.categories
+  if (!product) {
+    throw new CustomError.NotFoundError(`Product ${slug} not found`)
+  }
+  res.status(StatusCodes.OK).json({ productCategories })
+}
+
 // @desc      Create product
 // @route     POST /api/v1/product
 const createProduct = async (req, res) => {
@@ -67,18 +79,14 @@ const updateProductSingleAtribute = async (req, res) => {
   if (!product) {
     throw new CustomError.NotFoundError(`Product ${req.params.slug} not found`)
   }
-  if (name) {
-    return res.status(StatusCodes.OK).json({ name })
-  }
-  if (sku) {
-    return res.status(StatusCodes.OK).json({ sku })
-  }
-  if (price) {
-    return res.status(StatusCodes.OK).json({ price })
-  }
-  if (categories) {
-    return res.status(StatusCodes.OK).json({ categories })
-  }
+
+  name && res.status(StatusCodes.OK).json({ name })
+
+  sku && res.status(StatusCodes.OK).json({ sku })
+
+  price && res.status(StatusCodes.OK).json({ price })
+
+  categories && res.status(StatusCodes.OK).json({ categories })
 }
 
 // @desc      Delete product
@@ -101,4 +109,5 @@ export {
   updateProduct,
   updateProductSingleAtribute,
   getProduct,
+  getProductCategories,
 }
